@@ -1,0 +1,33 @@
+name: Deploy EKS Cluster
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'modules/eks/**'
+      - '.github/workflows/eks_deployment.yml'
+
+jobs:
+  deploy-eks:
+    name: Deploy EKS Cluster
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform Init
+      run: terraform init -backend-config="backend.hcl" modules/eks
+
+    - name: Terraform Plan
+      run: terraform plan modules/eks
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve modules/eks
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
