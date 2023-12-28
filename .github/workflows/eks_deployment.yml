@@ -19,9 +19,10 @@ jobs:
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
-
+      
     - name: Terraform Init
-      run: terraform init -backend-config="backend.hcl" modules/eks
+      run: terraform init -backend-config="backend.hcl"
+      working-directory: ./modules/eks
 
     - name: Terraform Plan
       run: terraform plan modules/eks
