@@ -13,9 +13,10 @@ resource "aws_subnet" "eks_subnet" {
 
   vpc_id            = aws_vpc.eks_vpc.id
   cidr_block        = count.index == 0 ? "10.0.1.0/24" : "10.0.2.0/24"
-  availability_zone = "us-west-2a"  # Change to your availability zone
+  availability_zone = count.index == 0 ? "us-west-2a" : "us-west-2b"
 
   tags = {
     Name = "eks_subnet_${count.index}"
   }
 }
+
